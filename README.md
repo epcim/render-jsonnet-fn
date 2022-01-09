@@ -1,13 +1,10 @@
 # render-jsonnet
 
-An KRM Function to render go templated manifests. 
+An KRM Function to render jsonnet configurations, manifests...
 
 - [KRM Fn specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md)
 - [go-getter](https://github.com/hashicorp/go-getter) is used to fetch sources
-- jsonnet + sprig rendering
-
-TODO:
-- render engine [gomplate](https://gomplate.ca/) is used to render templates
+- jsonnet
 
 ```sh
 # build
@@ -21,16 +18,7 @@ kustomize build --enable-alpha-plugins --network example --mount "type=bind,rw=t
 ```
 
 
-## Engines
+## Dev
 
-- Jsonnet
-- ~Gomplate~
-- ~Helm~
-
-### Gomplate
-
-Not implemented
-
-### Helm
-
-Not implemented (send MR if you want it)
+- https://github.com/google/go-jsonnet
+- https://github.com/jsonnet-bundler/jsonnet-bundler
