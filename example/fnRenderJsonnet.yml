@@ -1,0 +1,28 @@
+apiVersion: fn.kpt.dev/v1
+kind: RenderJsonnet
+metadata:
+  name: render
+  annotations:
+    config.kubernetes.io/function: |
+      container:
+        network: true
+        image: render-jsonnet
+sources:
+- name: example
+  repo: git::https://github.com/epcim/k8s-kustomize-apps//example/manifests?ref=main
+  #update: false
+  #templateGlob: "*.t*pl"
+  kinds:
+  - "!namespace"
+  - ConfigMap,Deployment
+values:
+  nginx_cpu_request: "512m"
+  nginx:
+    cpu:
+      limit:  "1000m"
+    memory:
+      limit:  "1024M"
+
+
+
+

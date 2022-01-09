@@ -1,0 +1,10 @@
+image: gcr.io/kpt-fn/render-jsonnet
+description: Renders a local or remote jsonnet templates.
+tags:
+  - mutator
+sourceURL: https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/functions/go/render-jsonnet
+examplePackageURLs:
+  - https://github.com/GoogleContainerTools/kpt-functions-catalog/tree/master/examples/render-jsonnet
+emails:
+  - epcim@apealive.net
+license: Apache-2.0
