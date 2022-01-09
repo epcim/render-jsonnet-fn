@@ -7,6 +7,7 @@ RUN go mod download
 
 COPY . .
 RUN go build -o /usr/local/bin/function ./
+RUN go install -a github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
 
 #RUN apk update && apk add --no-cache curl
 
@@ -14,7 +15,7 @@ RUN go build -o /usr/local/bin/function ./
 
 FROM alpine:3.13
 COPY --from=0 /usr/local/bin/function /usr/local/bin/function
-#COPY --from=0 /usr/local/bin/helm /usr/local/bin/helm
+COPY --from=0 /usr/local/bin/jb /usr/local/bin/jb
 
 RUN apk update && apk add --no-cache git
 

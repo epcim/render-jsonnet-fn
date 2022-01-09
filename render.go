@@ -17,6 +17,7 @@ import (
 	"sigs.k8s.io/kustomize/api/resmap"
 	"sigs.k8s.io/kustomize/api/resource"
 
+	"github.com/google/go-jsonnet"
 	getter "github.com/hashicorp/go-getter"
 	kyaml "sigs.k8s.io/kustomize/kyaml/yaml"
 )
@@ -255,6 +256,36 @@ func (p *RenderPlugin) JsonnetRenderBuf(t string, out *bytes.Buffer) error {
 	}
 
 	// TODO, FIXME, implementation JsonnetRenderBuf
+
+	snippet := `{
+		{
+			local k = (import "github.com/jsonnet-libs/k8s-libsonnet/1.18/main.libsonnet"),
+			foo: k.apps.v1.deployment.new(name="foo", containers=[
+			  k.core.v1.container.new(name="foo", image="foo/bar")
+			])
+		  }
+	}`
+
+	//source dir
+	//os cd
+
+	// fetch deps
+	cmd := exec.Command("jb", "install", "github.com/jsonnet-libs/k8s-libsonnet/1.18/main.libsonnet")
+	//cmd.stdout = os.stdout
+	//cmd.stderr = os.stderr
+	err = cmd.Run()
+	if err != nil {
+		return fmt.Errorf("failed to run jsonnet-bundler %s", err)
+	}
+
+	// build
+	vm := jsonnet.MakeVM()
+	jsonStr, err := vm.EvaluateAnonymousSnippet("example1.jsonnet", snippet)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	out.WriteString(jsonStr)
 
 	return nil
 }
