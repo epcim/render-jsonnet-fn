@@ -1,0 +1,15 @@
+
+namespace: mon
+
+generators:
+- |-
+  apiVersion: v1
+  kind: krmFn
+  metadata:
+    name: local
+    annotations:
+      config.kubernetes.io/function: |
+        exec:
+          path: "fnRenderJsonnet"
+  spec:
+    path: ./kubernetes-mixins/lib/alerts.jsonnet

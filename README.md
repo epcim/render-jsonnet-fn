@@ -1,24 +1,50 @@
 # render-jsonnet
 
 An KRM Function to render jsonnet configurations, manifests...
+An generator to be used with Kubectl, Kustomize or Kpt...
 
-- [KRM Fn specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md)
-- [go-getter](https://github.com/hashicorp/go-getter) is used to fetch sources
-- jsonnet
+## Usage: Shell implementation
 
-```sh
-# build
-docker build -t render-jsonnet . 
+An prototype.
 
-# usage
-kustomize build --enable-alpha-plugins --network ./example 
-
-# dev
-kustomize build --enable-alpha-plugins --network example --mount "type=bind,rw=true,src=$PWD/tmp,dst=/tmp"
 ```
+kustomize build --enable-alpha-plugins --network ./example-exec
+```
+
+
+## Usage: Go implementation
+
+TBD
+
+## Function
+
+[KRM Fn specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md)
+
+See upstream/other function examples:
+- https://github.com/GoogleContainerTools/kpt-functions-catalog/blob/master/functions
+
+My other functions:
+- https://github.com/epcim/render-gotpl-fn
+
 
 
 ## Dev
 
 - https://github.com/google/go-jsonnet
 - https://github.com/jsonnet-bundler/jsonnet-bundler
+
+
+```
+go install github.com/jsonnet-bundler/jsonnet-bundler/cmd/jb@latest
+brew install jsonnet
+
+cd example-exec
+git clone https://github.com/kubernetes-monitoring/kubernetes-mixin
+
+cd  kubernetes-mixin
+jb install
+
+cd ../..
+cd example-exec
+../fnRenderJsonnet kubnernets-mixin/lib/alerts.json
+```

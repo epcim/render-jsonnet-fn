@@ -1,0 +1,38 @@
+#!/bin/bash
+
+## SH implementation of Gotpl render KRM Fn (this, draft)
+## GO implementation of Gotpl render KRM Fn (https://github.com/epcim/render-jsonnet-fn)
+
+# $1 - optional path to manifests
+[[ -z "$1" ]] || export TMPLPTH=$1
+
+# defaults
+export JSONNET=jsonnet
+which $JSONNET &>/dev/null || export JSONNET="docker run -i --rm=true -u ${UUID} -v ${WORKDIR}:${WORKDIR} -w ${WORKDIR} bitnami/jsonnet:latest "
+
+# read `kind: ResourceList` from stdin
+read -r -t 1 -d $'\0' resourceList
+
+# config
+TMPLPTH=${TMPLPTH:-$(echo "$resourceList" | yq e '.functionConfig.spec.path' -)}
+#CONTEXT=$(echo "$resourceList" | yq e '.functionConfig.spec.context' -)
+
+# print `kind: ResourceList` form $1/*.y*ml
+function printResourceList() {
+  echo "
+kind: ResourceList
+items:"
+  # for each file, print individual documents as list & indent
+  for f in $(ls $1/${2:-*.y*aml}); do 
+    echo "---"; cat $f;
+  done | awk '/./{print}' |\
+      awk -v RS="---\n" '{printf "- %s",$0;}' |\
+      sed -e 's/^/  /' -e 's/^  \-/-/' -e 's/- -[ -]*/- /g'
+}
+
+# stop if sourced
+[[ "$0" != "$BASH_SOURCE" ]] && return
+
+# serectl render & print
+${JSONNET} -J ${JPATH:-vendor} -S ${TMPLPTH:-*.jsonnet} 2>.log
+
