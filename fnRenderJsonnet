@@ -8,8 +8,9 @@
 [[ -z "$2" ]] || export JPATH=$2
 
 # defaults
-export JSONNET=jsonnet
-which $JSONNET &>/dev/null || export JSONNET="docker run -i --rm=true -u ${UUID} -v ${WORKDIR}:${WORKDIR} -w ${WORKDIR} bitnami/jsonnet:latest "
+export WORKDIR=$PWD
+export JSONNET=jsonnetxx
+which $JSONNET &>/dev/null || export JSONNET="docker run -i --rm=true -v ${WORKDIR}:${WORKDIR} -w ${WORKDIR} bitnami/jsonnet:latest"
 
 # read `kind: ResourceList` from stdin
 read -r -t 1 -d $'\0' resourceList

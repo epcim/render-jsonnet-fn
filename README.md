@@ -19,6 +19,10 @@ kustomize build --enable-alpha-plugins --network --enable-exec --load-restrictor
 
 TBD
 
+```
+docker build . -r render-jsonnet
+```
+
 ## Function
 
 [KRM Fn specification](https://github.com/kubernetes-sigs/kustomize/blob/master/cmd/config/docs/api-conventions/functions-spec.md)
