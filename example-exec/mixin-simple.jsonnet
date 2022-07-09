@@ -51,12 +51,12 @@ prometheusRules+::  {
 ; 
 
 // Manifests as ResourceList
-{ resourceList: {
-      kind: 'ResourceList',
-      items: []
-        + [ k.core.v1.configMap.new(name="foo", data=conf.prometheusAlerts) ]
-        + [ k.core.v1.configMap.new(name="bee", data=conf.prometheusRules) ]
-  }
+{
+  kind: 'ResourceList',
+  items: []
+    + [ k.core.v1.configMap.new(name="foo", data=conf.prometheusAlerts) ]
+    + [ k.core.v1.configMap.new(name="bee", data=conf.prometheusRules) ]
 }
+
 
 

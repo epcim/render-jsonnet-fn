@@ -8,7 +8,10 @@ An generator to be used with Kubectl, Kustomize or Kpt...
 An prototype.
 
 ```
-kustomize build --enable-alpha-plugins --network ./example-exec
+kustomize build --enable-alpha-plugins --enable-exec ./example-exec
+
+# with other flags
+kustomize build --enable-alpha-plugins --network --enable-exec --load-restrictor LoadRestrictionsNone ./example-exec
 ```
 
 
@@ -30,14 +33,14 @@ My other functions:
 ## Setup to run examples
 
 ```
-brew install jb yq jq kustomize kubectl
+brew install jsonnet-bundler yq jq kustomize kubectl
 
-mkdir vendor
-jb init
-jb install github.com/kubernetes-monitoring/kubernetes-mixin
-jb install github.com/jsonnet-libs/k8s-libsonnet/1.24@main
+jb install
 
-# test
+# dependencies
+# jb install github.com/kubernetes-monitoring/kubernetes-mixin
+# jb install github.com/jsonnet-libs/k8s-libsonnet/1.24@main
+
 ```
 
 ## Dev

@@ -1,6 +1,0 @@
-
-namespace: &ns media
-
-generators:
-- ./fnRenderJsonnet.yml
-

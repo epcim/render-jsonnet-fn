@@ -18,7 +18,7 @@ read -r -t 1 -d $'\0' resourceList
 FILE=${FILE:-$(echo "$resourceList" | yq e '.functionConfig.spec.file' -)}
 JPATH=${JPATH:-$(echo "$resourceList" | yq e '.functionConfig.spec.jpath' -)}
 
-# fixture
+# fixtures, allow direction execution
 JPATH=${JPATH//null/vendor}
 
 # stop if sourced
