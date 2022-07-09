@@ -27,6 +27,18 @@ My other functions:
 - https://github.com/epcim/render-gotpl-fn
 
 
+## Setup to run examples
+
+```
+brew install jb yq jq kustomize kubectl
+
+mkdir vendor
+jb init
+jb install github.com/kubernetes-monitoring/kubernetes-mixin
+jb install github.com/jsonnet-libs/k8s-libsonnet/1.24@main
+
+# test
+```
 
 ## Dev
 

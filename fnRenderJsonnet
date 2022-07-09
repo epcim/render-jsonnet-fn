@@ -4,7 +4,8 @@
 ## GO implementation of Gotpl render KRM Fn (https://github.com/epcim/render-jsonnet-fn)
 
 # $1 - optional path to manifests
-[[ -z "$1" ]] || export TMPLPTH=$1
+[[ -z "$1" ]] || export FILE=$1
+[[ -z "$2" ]] || export JPATH=$2
 
 # defaults
 export JSONNET=jsonnet
@@ -14,25 +15,19 @@ which $JSONNET &>/dev/null || export JSONNET="docker run -i --rm=true -u ${UUID}
 read -r -t 1 -d $'\0' resourceList
 
 # config
-TMPLPTH=${TMPLPTH:-$(echo "$resourceList" | yq e '.functionConfig.spec.path' -)}
-#CONTEXT=$(echo "$resourceList" | yq e '.functionConfig.spec.context' -)
+FILE=${FILE:-$(echo "$resourceList" | yq e '.functionConfig.spec.file' -)}
+JPATH=${JPATH:-$(echo "$resourceList" | yq e '.functionConfig.spec.jpath' -)}
 
-# print `kind: ResourceList` form $1/*.y*ml
-function printResourceList() {
-  echo "
-kind: ResourceList
-items:"
-  # for each file, print individual documents as list & indent
-  for f in $(ls $1/${2:-*.y*aml}); do 
-    echo "---"; cat $f;
-  done | awk '/./{print}' |\
-      awk -v RS="---\n" '{printf "- %s",$0;}' |\
-      sed -e 's/^/  /' -e 's/^  \-/-/' -e 's/- -[ -]*/- /g'
-}
+# fixture
+JPATH=${JPATH//null/vendor}
 
 # stop if sourced
 [[ "$0" != "$BASH_SOURCE" ]] && return
 
-# serectl render & print
-${JSONNET} -J ${JPATH:-vendor} -S ${TMPLPTH:-*.jsonnet} 2>.log
+# DEBUG
+#echo ${JSONNET} -J ${JPATH} ${FILE:-*.jsonnet} > .cmd
+#${JSONNET} -J ${JPATH} ${FILE:-*.jsonnet} | yq eval -P -  > .out
+#${JSONNET} -J ${JPATH} ${FILE:-*.jsonnet} | yq eval -P -  
+
+${JSONNET} -J ${JPATH:-$(dirname $0)/vendor} ${FILE:-*.jsonnet} 2>.log | yq eval -P - || { cat .log; rm .log; }
 
